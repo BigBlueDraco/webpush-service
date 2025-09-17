@@ -1,0 +1,60 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+.pnpm-debug.log
+
+# Turborepo cache
+.turbo/
+turbo/
+
+# Build output
+dist/
+build/
+out/
+.next/
+.nextjs/
+.cache/
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# Env files
+.env
+.env.local
+.env.*.local
+**/.env
+vapid.json
+# Logs
+logs
+*.log
+*.log.*
+lerna-debug.log
+
+# Editor & OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+docker-compose.override.yml
+
+# Test & coverage
+coverage/
+*.lcov
+
+# Other package managers
+.pnp*
+.yarn-integrity
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
