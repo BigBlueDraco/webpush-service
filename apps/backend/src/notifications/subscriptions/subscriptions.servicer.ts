@@ -10,6 +10,13 @@ export class SubscriptionsService {
   ) {}
 
   async create(sub: CreateSubscriptionDto): Promise<Subscription> {
+    const exSub = await this.subscriptionRepository.getOneWhere({
+      endpoint: sub.endpoint,
+    });
+
+    if (exSub) {
+      return exSub;
+    }
     return this.subscriptionRepository.create(sub);
   }
 

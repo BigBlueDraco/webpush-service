@@ -1,27 +1,47 @@
 version: "3.9"
 services:
-  # backend:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/backend/Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - mongo
-  #   environment:
-  #     - MONGODB_URI=mongodb://mongo:27017
-  # frontend:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/frontend/Dockerfile
-  #   ports:
-  #     - "4000:80"
+  backend:
+    build:
+      context: .
+      dockerfile: ./apps/backend/Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+      - mongo
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+      - VAPID_PUBLIC_KEY=${VAPID_PUBLIC_KEY}
+      - VAPID_PRIVATE_KEY=${VAPID_PRIVATE_KEY}
+      - VAPID_SUBJECT=${VAPID_SUBJECT}
+      - FRONT_URL=${FRONT_URL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile
+    ports:
+      - "4000:80"
+    environment:
+      - VITE_BACKEND_URL=${BACKEND_URL}
+      - VITE_VAPID_PUBLIC_KEY=${VAPID_PUBLIC_KEY}
   mongo:
     image: mongo:6
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=my-password
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
 
 volumes:
   mongo_data:

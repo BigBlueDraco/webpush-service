@@ -5,6 +5,7 @@ import { CAMPAIGN_QUEUE_JOB_NAMES, CAMPAIGN_QUEUE_NAME } from './constants';
 import { CampaignQueue } from './campaigns.queue';
 import { CampaignsService } from './campaigns.service';
 import { CampaignStatus } from './schemas/campaign.schema';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 interface ICampaignProcessor {
   processStartCampaign(job: Job);
@@ -31,6 +32,7 @@ export class CampaignProcessor
   constructor(
     private readonly queue: CampaignQueue,
     private readonly service: CampaignsService,
+    private readonly notificationsService: NotificationsService,
   ) {
     super();
   }
@@ -48,6 +50,7 @@ export class CampaignProcessor
   async processStartCampaign(job: Job) {
     try {
       const updateData = this.service.increaseDeliveredCount(job.data._id);
+      this.notificationsService.batchSendPush(job.data);
       this.queue.nextCampaign(await updateData);
 
       this.logger.log(`➡️ Start campaign: ${JSON.stringify(job.data)}`);
@@ -56,6 +59,7 @@ export class CampaignProcessor
 
   async processNextCampaign(job: Job) {
     const updateData = await this.service.increaseDeliveredCount(job.data._id);
+    this.notificationsService.batchSendPush(job.data);
     if (updateData.status === CampaignStatus.DELIVERED) {
       this.queue.finishCampaign(job.data);
       return;

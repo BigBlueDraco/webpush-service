@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsObject, IsString, IsUrl } from 'class-validator';
+import { IsBoolean, IsObject, IsOptional, IsString } from 'class-validator';
 import { ISubscription } from '../schemas/subscription.schema';
 
 export class CreateSubscriptionDto implements ISubscription {
@@ -8,7 +8,6 @@ export class CreateSubscriptionDto implements ISubscription {
     example: 'https://fcm.googleapis.com/fcm/send/e9jJ5n2...',
   })
   @IsString()
-  @IsUrl()
   endpoint: string;
 
   @ApiProperty({
@@ -29,6 +28,7 @@ export class CreateSubscriptionDto implements ISubscription {
     example: true,
     default: true,
   })
+  @IsOptional()
   @IsBoolean()
   active: boolean;
 }

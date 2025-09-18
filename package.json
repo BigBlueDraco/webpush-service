@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
-    "install-all": "pnpm install"
+    "docker:up": "docker compose up",
+    "generate:vapid": "node vapid.js"
   },
   "devDependencies": {
     "turbo": "^2.5.6"
@@ -18,5 +19,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "dotenv": "^17.2.2"
+  }
 }

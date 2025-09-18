@@ -8,6 +8,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { CampaignRepository } from './campaigns.repository';
 import { Campaign, CampaignSchema } from './schemas/campaign.schema';
 import { MongooseModule } from '@nestjs/mongoose';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forFeature([
       { name: Campaign.name, schema: CampaignSchema },
     ]),
+    NotificationsModule,
   ],
   controllers: [CampaignsController],
   providers: [

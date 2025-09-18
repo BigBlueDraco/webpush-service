@@ -11,8 +11,7 @@ import { CreateSubscriptionDto } from './dtos/create-subscription.dto';
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
   @Post('/push/subscribe')
-  pushSubscribe(@Body() body: CreateSubscriptionDto) {
-    this.notificationsService.subscribe(body);
-    throw new NotImplementedException();
+  async pushSubscribe(@Body() body: CreateSubscriptionDto) {
+    return await this.notificationsService.subscribe(body);
   }
 }

@@ -8,9 +8,11 @@ import {
 } from './schemas/subscription.schema';
 import { SubscriptionRepository } from './subscriptions/subscription.repository';
 import { SubscriptionsService } from './subscriptions/subscriptions.servicer';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule,
     MongooseModule.forFeature([
       { name: Subscription.name, schema: SubscriptionSchema },
     ]),
@@ -21,5 +23,6 @@ import { SubscriptionsService } from './subscriptions/subscriptions.servicer';
     SubscriptionRepository,
     SubscriptionsService,
   ],
+  exports: [NotificationsService],
 })
 export class NotificationsModule {}
