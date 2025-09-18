@@ -54,18 +54,32 @@ export class CampaignProcessor
       this.queue.nextCampaign(await updateData);
 
       this.logger.log(`➡️ Start campaign: ${JSON.stringify(job.data)}`);
-    } catch (err) {}
+    } catch (err) {
+      this.logger.error(
+        `➡️ Start campaign: ${JSON.stringify(job.data)} error: ${err}`,
+      );
+      this.queue.finishCampaign(job.data);
+    }
   }
 
   async processNextCampaign(job: Job) {
-    const updateData = await this.service.increaseDeliveredCount(job.data._id);
-    this.notificationsService.batchSendPush(job.data);
-    if (updateData.status === CampaignStatus.DELIVERED) {
+    try {
+      const updateData = await this.service.increaseDeliveredCount(
+        job.data._id,
+      );
+      this.notificationsService.batchSendPush(job.data);
+      if (updateData.status === CampaignStatus.DELIVERED) {
+        this.queue.finishCampaign(job.data);
+        return;
+      }
+      this.queue.nextCampaign(await updateData);
+      this.logger.log(`➡️ Next campaign: ${JSON.stringify(job.data)}`);
+    } catch (err) {
+      this.logger.error(
+        `➡️ Next campaign: ${JSON.stringify(job.data)}; error: ${err}`,
+      );
       this.queue.finishCampaign(job.data);
-      return;
     }
-    this.queue.nextCampaign(await updateData);
-    this.logger.log(`➡️ Next campaign: ${JSON.stringify(job.data)}`);
   }
 
   async processFinishCampaign(job: Job) {
